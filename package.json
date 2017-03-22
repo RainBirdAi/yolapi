@@ -1,0 +1,19 @@
+{
+  "name": "yolapi",
+  "version": "0.1.0",
+  "description": "Example API wrapper for Rainbird's inference engine.",
+  "main": "yolapi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Holdy/yolapi.git"
+  },
+  "author": "Chris H <chris.holden@rainbird.ai>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Holdy/yolapi/issues"
+  },
+  "homepage": "https://github.com/Holdy/yolapi#readme"
+}
