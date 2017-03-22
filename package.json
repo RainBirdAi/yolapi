@@ -1,6 +1,6 @@
 {
   "name": "yolapi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Example API wrapper for Rainbird's inference engine.",
   "main": "yolapi.js",
   "scripts": {
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Holdy/yolapi/issues"
   },
+  "dependencies" : {
+    "superagent" : "3.5.x"
+  },
   "homepage": "https://github.com/Holdy/yolapi#readme"
 }
+
+
