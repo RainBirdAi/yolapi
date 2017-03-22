@@ -1,4 +1,4 @@
-# Jsonfig - A simple and flexible configuration loader.
+# YolApi - An example API wrapper for Rainbird's inference engine.
 
 ```javascript
 var api = require('yolapi');
