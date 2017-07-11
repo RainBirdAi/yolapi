@@ -5,7 +5,11 @@ function isUrl (item) {
 }
 
 function buildParams(urlString, b, c) {
-    return {url: urlString, apiKey:b, kmId:c};
+    if (b && b.start_proxy) {
+        return {url: urlString, start_proxy: b.start_proxy, kmId: 'supplied-by-proxy'};
+    } else {
+        return {url: urlString, apiKey:b, kmId:c};
+    }
 }
 
 function processParameters (a,b,c) {
@@ -18,6 +22,17 @@ function processParameters (a,b,c) {
     } else {
         return null;
     }
+}
+
+function attemptProxyStart(session, callback) {
+    request
+        .get(session.parameters.start_proxy)
+        .end(function(err, response) {
+            if (!err && response && response.body) {
+                session.id = response.body.id || response.body.sessionId;
+            }
+            callback(err);
+        });
 }
 
 function attemptStart(session, allowSwap, callback) {
@@ -93,12 +108,16 @@ function session(a, b, c) {
     this.parameters = processParameters(a, b, c);
     var p = this.parameters;
 
-    if (!p || (!p.url || !p.apiKey || !p.kmId)) {
+    if (!p || (!p.url || (!p.apiKey && !p.start_proxy) || !p.kmId)) {
         throw new Error('The Url, apiKey and kmId are all required.');
     }
 
     this.start = function (callback) {
-        attemptStart(this, true, callback);
+        if (this.parameters.start_proxy) {
+            attemptProxyStart(this, callback);
+        } else {
+            attemptStart(this, true, callback);
+        }
     };
 
     this.inject = function(arrayOfFacts, callback) {
