@@ -67,6 +67,15 @@ function doQuery(session, data, callback) {
         });
 }
 
+function doMetadata(session, data, callback) {
+    request
+        .post(session.parameters.url + '/' + session.id +  '/metadata')
+        .send(data)
+        .end(function (error,response){
+            callback(error, error ? null : response.body);
+        });
+}
+
 function doRespond(session, data, callback) {
     request
         .post(session.parameters.url + '/' + session.id +  '/response')
@@ -104,6 +113,7 @@ function doInject(session, arrayOfFacts, callback) {
         });
 }
 
+
 function session(a, b, c) {
     this.parameters = processParameters(a, b, c);
     var p = this.parameters;
@@ -122,6 +132,9 @@ function session(a, b, c) {
 
     this.inject = function(arrayOfFacts, callback) {
         doInject(this, arrayOfFacts, callback);
+    }
+    this.metadata = function(data, callback) {
+        doMetadata(this, data, callback);
     }
 
     this.query = function(data, callback) {
