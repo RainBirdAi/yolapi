@@ -51,7 +51,7 @@ function attemptStart(session, allowSwap, callback) {
                 }
             } else if (response && response.body && response.body.id) {
                 session.id = response.body.id;
-                callback();
+                callback(null, response.body);
             } else {
                 callback(err);
             }

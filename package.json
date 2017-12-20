@@ -1,6 +1,6 @@
 {
   "name": "yolapi",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Example API wrapper for Rainbird's inference engine.",
   "main": "yolapi.js",
   "scripts": {
