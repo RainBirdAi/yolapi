@@ -38,6 +38,7 @@ function attemptProxyStart(session, callback) {
 function attemptStart(session, allowSwap, callback) {
     request
         .get(session.parameters.url + '/start/' + session.parameters.kmId + '')
+        .query(session.queryComponents)
         .set('Authorization', 'Basic ' + new Buffer(session.parameters.apiKey + ':').toString('base64'))
         .end(function (err, response) {
             if (err && err.message === 'Unauthorized') {
@@ -114,13 +115,15 @@ function doInject(session, arrayOfFacts, callback) {
 }
 
 
-function session(a, b, c) {
+function session(a, b, c, d) {
     this.parameters = processParameters(a, b, c);
     var p = this.parameters;
 
     if (!p || (!p.url || (!p.apiKey && !p.start_proxy) || !p.kmId)) {
         throw new Error('The Url, apiKey and kmId are all required.');
     }
+
+    this.queryComponents = d || {};
 
     this.start = function (callback) {
         if (this.parameters.start_proxy) {
