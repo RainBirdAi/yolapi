@@ -15,10 +15,8 @@
   "bugs": {
     "url": "https://github.com/Holdy/yolapi/issues"
   },
-  "dependencies" : {
-    "superagent" : "3.5.x"
+  "dependencies": {
+    "superagent": "^3.8.3"
   },
   "homepage": "https://github.com/Holdy/yolapi#readme"
 }
-
-
