@@ -4,12 +4,21 @@ let mockResponse = {
   status: () => {
     return 200;
   },
+  body: {},
 };
 
-let request = {
-  post: jest.fn().mockReturnThis(),
+let requestUrl;
 
-  get: jest.fn().mockReturnThis(),
+let request = {
+  post: jest.fn(function (url) {
+    requestUrl = url;
+    return this;
+  }),
+
+  get: jest.fn(function (url) {
+    requestUrl = url;
+    return this;
+  }),
 
   send: jest.fn().mockReturnThis(),
 
@@ -31,6 +40,10 @@ let request = {
 
   __setMockResponseBody: (body) => {
     mockResponse.body = body;
+  },
+
+  __getRequestUrl: () => {
+    return requestUrl;
   },
 };
 

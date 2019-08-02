@@ -57,6 +57,8 @@ describe('session', () => {
     let session;
 
     beforeAll((done) => {
+      request.__setMockResponseBody({ id: 123456 });
+
       session = new yolapi.session(
         'https://some-environment.rainbird.ai',
         'apikey',
@@ -64,21 +66,29 @@ describe('session', () => {
       );
 
       session.start((err) => {
-          expect(err).toBeFalsy();
-          done();
+        expect(err).toBeFalsy();
+        done();
       });
     });
 
     test('should be able call the undo endpoint', (done) => {
-      // request.__setMockError(new Error('cheese'));
-
-      session.undo('test', (err, result) => {
+      session.undo((err, result) => {
         expect(err).toBeFalsy();
         expect(result).toBeTruthy();
+        expect(request.__getRequestUrl()).toEqual('https://some-environment.rainbird.ai/123456/undo');
         done();
       });
+    });
 
-    })
+    test('should return errors from the undo endpoint', (done) => {
+      request.__setMockError(new Error('Failed to find session.'));
+
+      session.undo((err, result) => {
+        expect(err).toBeTruthy();
+        expect(result).toBeFalsy();
+        done();
+      });
+    });
 
   });
 });
