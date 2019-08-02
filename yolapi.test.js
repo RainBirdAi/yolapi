@@ -22,7 +22,7 @@ describe('session', () => {
           null,
         );
       } catch (e) {
-        expect(e).toBeTruthy();
+        expect(e.message).toEqual('The Url, apiKey and kmId are all required.');
       }
     });
 
@@ -34,7 +34,7 @@ describe('session', () => {
           'kmid',
         );
       } catch (e) {
-        expect(e).toBeTruthy();
+        expect(e.message).toEqual('The Url, apiKey and kmId are all required.');
       }
     });
 
@@ -46,7 +46,7 @@ describe('session', () => {
           'kmid',
         );
       } catch (e) {
-        expect(e).toBeTruthy();
+        expect(e.message).toEqual('The Url, apiKey and kmId are all required.');
       }
     });
 

@@ -14,7 +14,7 @@ const injectData = [
     {subject:'Bob', relationship:'lives in', object:'England'}
 ];
 
-const queryData = { subject:'Bob', relationship:'speaks', object:null };
+const queryData = { subject:'Bob', relationship:'speaks', object: null };
 
 session.start(function(err, result) {
     if (err) throw (err);
@@ -45,7 +45,7 @@ const responseData = {
     answers: [{ subject: 'Bob', relationship: 'lives in', object: 'England' , cf: 100 }]
 };
 
-const queryData = { subject:'Bob', relationship:'speaks', object:null };
+const queryData = { subject:'Bob', relationship:'speaks', object: null };
 
 session.start(function(err, result) {
     if (err) throw (err);
