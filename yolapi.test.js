@@ -1,4 +1,5 @@
 const yolapi = require('../yolapi');
+const request = require('./__mocks__/superagent');
 
 describe('session', () => {
 
@@ -10,7 +11,7 @@ describe('session', () => {
         'apikey',
         'kmid',
       );
-      expect(session).toBeTruthy;
+      expect(session).toBeTruthy();
     });
 
     test('throws an error when the KMID is missing', () => {
@@ -21,7 +22,7 @@ describe('session', () => {
           null,
         );
       } catch (e) {
-        expect(e).toBeTruthy;
+        expect(e).toBeTruthy();
       }
     });
 
@@ -33,7 +34,7 @@ describe('session', () => {
           'kmid',
         );
       } catch (e) {
-        expect(e).toBeTruthy;
+        expect(e).toBeTruthy();
       }
     });
 
@@ -45,10 +46,39 @@ describe('session', () => {
           'kmid',
         );
       } catch (e) {
-        expect(e).toBeTruthy;
+        expect(e).toBeTruthy();
       }
     });
 
   });
 
+  describe('undo endpoint', () => {
+
+    let session;
+
+    beforeAll((done) => {
+      session = new yolapi.session(
+        'https://some-environment.rainbird.ai',
+        'apikey',
+        'kmid',
+      );
+
+      session.start((err) => {
+          expect(err).toBeFalsy();
+          done();
+      });
+    });
+
+    test('should be able call the undo endpoint', (done) => {
+      // request.__setMockError(new Error('cheese'));
+
+      session.undo('test', (err, result) => {
+        expect(err).toBeFalsy();
+        expect(result).toBeTruthy();
+        done();
+      });
+
+    })
+
+  });
 });
