@@ -89,6 +89,7 @@ function doRespond(session, data, callback) {
 function doUndo(session, callback) {
     request
         .post(session.parameters.url + '/' + session.id +  '/undo')
+        .send({})
         .end(function (error,response){
             callback(error, error ? null : response.body);
         });
