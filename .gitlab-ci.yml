@@ -1,0 +1,26 @@
+stages:
+  - install
+  - unit
+
+install:
+  stage: install
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: '15 mins'
+  tags:
+    - docker,dev,feat
+
+unit:
+  stage: unit
+  script:
+    - npm test
+  cache:
+    key: $CI_BUILD_REF_NAME
+    paths:
+      - node_modules/
+    policy: pull
+  tags:
+    - docker,dev,feat
