@@ -1,21 +1,27 @@
 {
-  "name": "@rainbird/yolapi",
+  "name": "@rainbirdai/yolapi",
   "version": "0.3.4",
   "description": "node.js wrapper for the Rainbird engine API.",
   "main": "yolapi.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RainbirdAi/yolapi.git"
   },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/RainbirdAi/yolapi/issues"
   },
   "dependencies": {
     "superagent": "^3.8.3"
   },
-  "homepage": "https://github.com/RainbirdAi/yolapi#readme"
+  "homepage": "https://github.com/RainbirdAi/yolapi#readme",
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
 }

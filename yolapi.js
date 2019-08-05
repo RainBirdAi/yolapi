@@ -86,6 +86,14 @@ function doRespond(session, data, callback) {
         });
 }
 
+function doUndo(session, callback) {
+    request
+        .post(session.parameters.url + '/' + session.id +  '/undo')
+        .send({})
+        .end(function (error,response){
+            callback(error, error ? null : response.body);
+        });
+}
 
 function prepareError (error, response) {
     var result = null;
@@ -135,18 +143,24 @@ function session(a, b, c, d) {
 
     this.inject = function(arrayOfFacts, callback) {
         doInject(this, arrayOfFacts, callback);
-    }
+    };
+
     this.metadata = function(data, callback) {
         doMetadata(this, data, callback);
-    }
+    };
 
     this.query = function(data, callback) {
         doQuery(this, data, callback);
-    }
+    };
 
     this.respond = function(data, callback) {
         doRespond(this, data, callback);
-    }
+    };
+
+    this.undo = function(callback) {
+        doUndo(this, callback);
+    };
+
 }
 
 module.exports.session = session;
