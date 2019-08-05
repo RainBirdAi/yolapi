@@ -3,7 +3,7 @@
 Example which injects a fact:
 
 ```javascript
-const api = require('@rainbird/yolapi');
+const api = require('@rainbirdai/yolapi');
 const session = new api.session(
     'https://some-environment.rainbird.ai', // The environment you're targetting.
     '0648bb21-9fce-4ec7-ae4e-917fa4c2a7ee', // Your Api key.
@@ -34,7 +34,7 @@ session.start(function(err, result) {
 Example which initially answers a question and then goes back using undo:
 
 ```javascript
-const api = require('@rainbird/yolapi');
+const api = require('@rainbirdai/yolapi');
 const session = new api.session(
     'https://some-environment.rainbird.ai', // The environment you're targetting.
     '0648bb21-9fce-4ec7-ae4e-917fa4c2a7ee', // Your Api key.
