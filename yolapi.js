@@ -1,24 +1,24 @@
 var request = require('superagent');
 
-function isUrl (item) {
+function isUrl(item) {
     return item && item.indexOf('://') != -1;
 }
 
 function buildParams(urlString, b, c) {
     if (b && b.start_proxy) {
-        return {url: urlString, start_proxy: b.start_proxy, kmId: 'supplied-by-proxy'};
+        return { url: urlString, start_proxy: b.start_proxy, kmId: 'supplied-by-proxy', engine };
     } else {
-        return {url: urlString, apiKey:b, kmId:c};
+        return { url: urlString, apiKey: b, kmId: c, engine };
     }
 }
 
-function processParameters (a,b,c) {
+function processParameters(a, b, c, engine) {
     if (isUrl(a)) {
-        return buildParams(a,b,c);
+        return buildParams(a, b, c, engine);
     } else if (isUrl(b)) {
-        return buildParams(b,a,c);
+        return buildParams(b, a, c, engine);
     } else if (isUrl(c)) {
-        return buildParams(c,a,b);
+        return buildParams(c, a, b, engine);
     } else {
         return null;
     }
@@ -27,7 +27,7 @@ function processParameters (a,b,c) {
 function attemptProxyStart(session, callback) {
     request
         .get(session.parameters.start_proxy)
-        .end(function(err, response) {
+        .end(function (err, response) {
             if (!err && response && response.body) {
                 session.id = response.body.id || response.body.sessionId;
             }
@@ -40,6 +40,7 @@ function attemptStart(session, allowSwap, callback) {
         .get(session.parameters.url + '/start/' + session.parameters.kmId + '')
         .query(session.queryComponents)
         .set('Authorization', 'Basic ' + new Buffer(session.parameters.apiKey + ':').toString('base64'))
+        .set('x-rainbird-engine', session.parameters.engine)
         .end(function (err, response) {
             if (err && err.message === 'Unauthorized') {
                 if (allowSwap) {
@@ -61,41 +62,41 @@ function attemptStart(session, allowSwap, callback) {
 
 function doQuery(session, data, callback) {
     request
-        .post(session.parameters.url + '/' + session.id +  '/query')
+        .post(session.parameters.url + '/' + session.id + '/query')
         .send(data)
-        .end(function (error,response){
+        .end(function (error, response) {
             callback(error, error ? null : response.body);
         });
 }
 
 function doMetadata(session, data, callback) {
     request
-        .post(session.parameters.url + '/' + session.id +  '/metadata')
+        .post(session.parameters.url + '/' + session.id + '/metadata')
         .send(data)
-        .end(function (error,response){
+        .end(function (error, response) {
             callback(error, error ? null : response.body);
         });
 }
 
 function doRespond(session, data, callback) {
     request
-        .post(session.parameters.url + '/' + session.id +  '/response')
+        .post(session.parameters.url + '/' + session.id + '/response')
         .send(data)
-        .end(function (error,response){
+        .end(function (error, response) {
             callback(error, error ? null : response.body);
         });
 }
 
 function doUndo(session, callback) {
     request
-        .post(session.parameters.url + '/' + session.id +  '/undo')
+        .post(session.parameters.url + '/' + session.id + '/undo')
         .send({})
-        .end(function (error,response){
+        .end(function (error, response) {
             callback(error, error ? null : response.body);
         });
 }
 
-function prepareError (error, response) {
+function prepareError(error, response) {
     var result = null;
     if (error) {
         var message = error.message;
@@ -114,17 +115,17 @@ function prepareError (error, response) {
 
 function doInject(session, arrayOfFacts, callback) {
     request
-        .post(session.parameters.url + '/' + session.id +  '/inject')
+        .post(session.parameters.url + '/' + session.id + '/inject')
         .send(arrayOfFacts)
-        .end(function (error,response) {
+        .end(function (error, response) {
             var cleanError = prepareError(error, response);
             callback(cleanError, cleanError ? null : response.body);
         });
 }
 
 
-function session(a, b, c, d) {
-    this.parameters = processParameters(a, b, c);
+function session(a, b, c, d, engine = 'Core') {
+    this.parameters = processParameters(a, b, c, engine);
     var p = this.parameters;
 
     if (!p || (!p.url || (!p.apiKey && !p.start_proxy) || !p.kmId)) {
@@ -141,23 +142,23 @@ function session(a, b, c, d) {
         }
     };
 
-    this.inject = function(arrayOfFacts, callback) {
+    this.inject = function (arrayOfFacts, callback) {
         doInject(this, arrayOfFacts, callback);
     };
 
-    this.metadata = function(data, callback) {
+    this.metadata = function (data, callback) {
         doMetadata(this, data, callback);
     };
 
-    this.query = function(data, callback) {
+    this.query = function (data, callback) {
         doQuery(this, data, callback);
     };
 
-    this.respond = function(data, callback) {
+    this.respond = function (data, callback) {
         doRespond(this, data, callback);
     };
 
-    this.undo = function(callback) {
+    this.undo = function (callback) {
         doUndo(this, callback);
     };
 
