@@ -4,7 +4,7 @@ function isUrl(item) {
     return item && item.indexOf('://') != -1;
 }
 
-function buildParams(urlString, b, c) {
+function buildParams(urlString, b, c, engine) {
     if (b && b.start_proxy) {
         return { url: urlString, start_proxy: b.start_proxy, kmId: 'supplied-by-proxy', engine };
     } else {
@@ -63,6 +63,7 @@ function attemptStart(session, allowSwap, callback) {
 function doQuery(session, data, callback) {
     request
         .post(session.parameters.url + '/' + session.id + '/query')
+        .set('x-rainbird-engine', session.parameters.engine)
         .send(data)
         .end(function (error, response) {
             callback(error, error ? null : response.body);
@@ -72,6 +73,7 @@ function doQuery(session, data, callback) {
 function doMetadata(session, data, callback) {
     request
         .post(session.parameters.url + '/' + session.id + '/metadata')
+        .set('x-rainbird-engine', session.parameters.engine)
         .send(data)
         .end(function (error, response) {
             callback(error, error ? null : response.body);
@@ -81,6 +83,7 @@ function doMetadata(session, data, callback) {
 function doRespond(session, data, callback) {
     request
         .post(session.parameters.url + '/' + session.id + '/response')
+        .set('x-rainbird-engine', session.parameters.engine)
         .send(data)
         .end(function (error, response) {
             callback(error, error ? null : response.body);
@@ -90,6 +93,7 @@ function doRespond(session, data, callback) {
 function doUndo(session, callback) {
     request
         .post(session.parameters.url + '/' + session.id + '/undo')
+        .set('x-rainbird-engine', session.parameters.engine)
         .send({})
         .end(function (error, response) {
             callback(error, error ? null : response.body);
@@ -116,6 +120,7 @@ function prepareError(error, response) {
 function doInject(session, arrayOfFacts, callback) {
     request
         .post(session.parameters.url + '/' + session.id + '/inject')
+        .set('x-rainbird-engine', session.parameters.engine)
         .send(arrayOfFacts)
         .end(function (error, response) {
             var cleanError = prepareError(error, response);
