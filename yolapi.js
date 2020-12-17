@@ -39,7 +39,7 @@ function attemptStart(session, allowSwap, callback) {
     request
         .get(session.parameters.url + '/start/' + session.parameters.kmId + '')
         .query(session.queryComponents)
-        .set('Authorization', 'Basic ' + new Buffer(session.parameters.apiKey + ':').toString('base64'))
+        .set('Authorization', 'Basic ' + Buffer.from(session.parameters.apiKey + ':').toString('base64'))
         .set('x-rainbird-engine', session.parameters.engine)
         .end(function (err, response) {
             if (err && err.message === 'Unauthorized') {
